@@ -1,0 +1,53 @@
+services:
+  neo4j:
+    image: neo4j:5.26-enterprise  # Enterprise for better performance features
+    container_name: neo4j-ownership
+    ports:
+      - "7474:7474"   # Neo4j Browser
+      - "7687:7687"   # Bolt driver
+    environment:
+      # Authentication
+      - NEO4J_AUTH=neo4j/ownership123
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+      
+    volumes:
+      - ./data:/data
+      - ./logs:/logs
+      - ./conf:/var/lib/neo4j/conf
+    
+    # Resource limits (increased for large dataset)
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 6G
+    networks:
+      - ownership_network
+
+  app:
+    build: .
+    container_name: ownership_app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"  # API port
+      - "8501:8501"  # Frontend port
+    environment:
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=ownership123
+      - API_URL=http://localhost:8000
+    depends_on:
+      - neo4j
+    networks:
+      - ownership_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/", "&&", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+networks:
+  ownership_network:
+    driver: bridge
