@@ -7,8 +7,6 @@ Interactive web interface for searching entities and visualizing ownership netwo
 import streamlit as st
 import requests
 import plotly.graph_objects as go
-import plotly.express as px
-from plotly.subplots import make_subplots
 import pandas as pd
 import networkx as nx
 import time

@@ -20,7 +20,5 @@ networkx==3.2.1
 # Shared dependencies
 requests==2.31.0
 
-# Additional dependencies for ownership mapping
-matplotlib==3.8.2
-seaborn==0.13.0
-numpy>=1.24.0,<2.0.0
+# Test data generation
+faker==20.1.0

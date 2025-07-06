@@ -32,21 +32,6 @@ docker-compose up --build -d
 ```
 
 **Note**: The first startup will take a few minutes to download images and initialize the database.
-```
-
-#### 2. Start FastAPI Backend
-```bash
-cd api
-pip install -r requirements.txt
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-#### 3. Start Streamlit Frontend
-```bash
-cd frontend
-pip install -r requirements.txt
-streamlit run app.py --server.port 8501
-```
 
 ## 🌐 Application URLs
 
